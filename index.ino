@@ -1,8 +1,8 @@
+// ------ CATAPULT ------
 #include <Servo.h>
 Servo catapultServo;
 #define SERVO_PIN 8
 #define CATAPULT_FIRE_PIN 9
-int catapultState = 0;
 
 // ------ RIGHT MOTORS ------
 #define RIGHT_CONTROL_PIN1 5 // Connected to right motors
