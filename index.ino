@@ -51,8 +51,7 @@ void setup()
     pinMode(RIGHT_CONTROL_PIN2, OUTPUT);
     pinMode(RIGHT_ENABLE_PIN, OUTPUT);
 
-    digitalWrite(LEFT_ENABLE_PIN, LOW);
-    digitalWrite(RIGHT_ENABLE_PIN, LOW);
+    stopRobot();
 
     pinMode(LED_PIN, OUTPUT);
 
@@ -62,8 +61,6 @@ void setup()
     pinMode(SERVO_PIN, OUTPUT);
     catapultServo.attach(SERVO_PIN);
     switchCatapultState();
-
-    stopRobot();
 }
 
 void loop()
@@ -75,15 +72,14 @@ void loop()
             // Turn on the LED
             digitalWrite(LED_PIN, HIGH);
 
-            delay(5000);
+            delay(2000);
             startRobot();
             
         }else{
             // Turn off the LED
             digitalWrite(LED_PIN, LOW);
-
-            delay(5000);
             stopRobot();
+            delay(1000);
         }
     }
     
@@ -109,17 +105,20 @@ void loop()
 
     updateDistance();
 
-    if(distance > 15.00 || distance == 0.00){
-        forward();
-    }else{
-        for (int i = 0; i < BOTTLES_NUMBER; i++)
-        {
-            bypass();
-        }
-        
-        stopRobot();
-    }   
-}
+    if(onOffState){
+
+        if(distance > 15.00 || distance == 0.00){
+            forward();
+        }else{
+            for (int i = 0; i < BOTTLES_NUMBER; i++)
+            {
+                bypass();
+            }
+            
+            stopRobot();
+        }   
+    }
+}   
 
 // Updaters
 void updateDistance()
@@ -143,16 +142,16 @@ void updateDirection()
 // Bypass
 void bypass(){
     Serial.println("bypass obstacle");
-    analogWrite(LED_PIN, 255);
+    digitalWrite(LED_PIN, HIGH);
     turn(firstLeft);
     delay(1000);
-    analogWrite(LED_PIN, 0);
+    digitalWrite(LED_PIN, LOW);
     forward();
     delay(1000);
-    analogWrite(LED_PIN, 255);
+    digitalWrite(LED_PIN, HIGH);
     turn(!firstLeft);
     delay(1000);
-    analogWrite(LED_PIN, 0);
+    digitalWrite(LED_PIN, LOW);
     firstLeft = !firstLeft;
 }
 
@@ -204,5 +203,5 @@ void fire()
 void switchCatapultState()
 {
     catapultLocked = !catapultLocked;
-    catapultServo.write(catapultLocked ? 85 : 65);
+    catapultServo.write(catapultLocked ? 85 : 55);
 }
