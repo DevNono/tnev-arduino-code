@@ -147,7 +147,7 @@ void bypass(){
     delay(1000);
     digitalWrite(LED_PIN, LOW);
     forward();
-    delay(1000);
+    delay(1800);
     digitalWrite(LED_PIN, HIGH);
     turn(!firstLeft);
     delay(1000);
