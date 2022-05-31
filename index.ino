@@ -22,8 +22,8 @@ bool leftMotorDirection = true;
 
 // ------ SENSOR ------
 #include "NewPing.h"
-#define ECHO_PIN 11
-#define TRIGGER_PIN 12
+#define ECHO_PIN 12
+#define TRIGGER_PIN 11
 #define MAX_DISTANCE 200
 float distance;
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
