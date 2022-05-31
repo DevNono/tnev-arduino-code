@@ -3,6 +3,8 @@
 Servo catapultServo;
 #define SERVO_PIN 8
 #define CATAPULT_FIRE_PIN 9
+bool catapultLocked = true;
+
 
 // ------ RIGHT MOTORS ------
 #define RIGHT_CONTROL_PIN1 5 // Connected to right motors
@@ -20,6 +22,8 @@ bool rightMotorDirection = true;
 bool leftMotorEnable = true;
 bool leftMotorDirection = true;
 
+bool firstLeft = true;
+
 // ------ SENSOR ------
 #include "NewPing.h"
 #define ECHO_PIN 12
@@ -28,15 +32,12 @@ bool leftMotorDirection = true;
 float distance;
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 
+// ------ GENERAL ------
 #define ON_OFF_PIN 10
 #define LED_PIN 13
 #define BOTTLES_NUMBER 5
 
 bool onOffState = false;
-
-bool catapultLocked = true;
-
-bool firstLeft = true;
 
 void setup()
 {
@@ -71,20 +72,36 @@ void loop()
     if(digitalRead(ON_OFF_PIN) == HIGH){
         onOffState = !onOffState;
         if(onOffState == true){
-            startRobot();
             // Turn on the LED
-            analogWrite(LED_PIN, 255);
+            digitalWrite(LED_PIN, HIGH);
+
+            delay(5000);
+            startRobot();
+            
         }else{
-            stopRobot();
             // Turn off the LED
-            analogWrite(LED_PIN, 0);
+            digitalWrite(LED_PIN, LOW);
+
+            delay(5000);
+            stopRobot();
         }
     }
     
     if(digitalRead(CATAPULT_FIRE_PIN) == HIGH){
-        analogWrite(LED_PIN, 128);
+        stopRobot();
+
+        for (int i = 0; i < 5; i++)
+        {
+            digitalWrite(LED_PIN, LOW);
+            delay(200);
+            digitalWrite(LED_PIN, HIGH);
+            delay(200);
+        }
+
         switchCatapultState();
-        delay(2000);
+        delay(1000);
+
+        digitalWrite(LED_PIN, LOW);
     }
 
     updateDirection();
